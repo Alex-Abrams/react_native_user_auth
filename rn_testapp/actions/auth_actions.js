@@ -3,6 +3,7 @@ export const LOAD_SPINNER = 'LOAD_SPINNER';
 export const FAILED_LOGIN = 'FAILED_LOGIN';
 export const RECEIVE_AUTH_TOKEN = "RECEIVE_AUTH_TOKEN";
 import fetch from 'cross-fetch';
+import { AsyncStorage } from 'react-native';
 
 
 export const receiveCurrentUser = currentUser => ({
@@ -40,6 +41,7 @@ export function getThatToken(email, password) {
     ) //;
     .then(
       // json => console.log(json),
+
       json => dispatch(receiveAuthToken(json)),
       err => console.log("jsonerror ", json)
     );
