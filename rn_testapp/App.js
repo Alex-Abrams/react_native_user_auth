@@ -16,7 +16,33 @@ import {
   StatusBar,
 } from 'react-native';
 
-const App = () => {
+import {Provider} from 'react-redux';
+import thunk from 'redux-thunk';
+import {applyMiddleware, combineReducers, createStore, compose} from 'redux';
+import logger from 'redux-logger'
+import authReducer from './reducers/auth_reducer';
+import LoginContainer from './containers/login_screen_container';
+
+
+let store = null;
+
+function configureStore(initialState = {}) {
+  // Check to avoid multiple configured stores
+  if (store) {
+    return store;
+  }
+  const middlewares = [thunk, logger];
+
+  store = createStore(
+    authReducer,
+    initialState,
+    compose(applyMiddleware(...middlewares))
+  );
+  return store;
+}
+
+let teststore = configureStore();
+
   // console.log("hello");
   // let findAuth = null;
 
@@ -35,34 +61,35 @@ const App = () => {
   //     console.log("RES", response.json());
   //     // let findAuth = response.json();
   //   });
-
-    async function getAuthToken() {
-      const authHolder = [];
-      return fetch('http://10.0.2.2:3000/authenticate', {
-          method: 'POST',
-          headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            email: "alex@gmail.com",
-            password: 'password'
-          })
-        }).then((response) => response.json())
-        .then((json) => {
-          console.log("jsonauthtoken", json.auth_token);
-          // console.log(typeof json.auth_token); //string
-          return authHolder.push(json.auth_token);
-          // return json.auth_token;
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-
-    const authToken = getAuthToken();
-
-    console.log(authToken);
+  
+// working one below
+    // async function getAuthToken() {
+    //   const authHolder = [];
+    //   return fetch('http://10.0.2.2:3000/authenticate', {
+    //       method: 'POST',
+    //       headers: {
+    //         Accept: 'application/json',
+    //         'Content-Type': 'application/json'
+    //       },
+    //       body: JSON.stringify({
+    //         email: "alex@gmail.com",
+    //         password: 'password'
+    //       })
+    //     }).then((response) => response.json())
+    //     .then((json) => {
+    //       console.log("jsonauthtoken", json.auth_token);
+    //       // console.log(typeof json.auth_token); //string
+    //       return authHolder.push(json.auth_token);
+    //       // return json.auth_token;
+    //     })
+    //     .catch((error) => {
+    //       console.log(error);
+    //     });
+    // }
+    //
+    // const authToken = getAuthToken();
+    //
+    // console.log(authToken);
 
     // async function getItems() {
     //   return fetch('http://10.0.2.2:3000/items', {
@@ -84,11 +111,15 @@ const App = () => {
   // console.log("FART: ", findAuth);
 
   // this.getData();
+  // <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+  // <Text>hello world! Lets test some shit</Text>
+  // </View>
 
+const App = () => {
   return (
-    <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
-      <Text>hello world! Lets test some shit</Text>
-    </View>
+    <Provider store={teststore}>
+      <LoginContainer />
+    </Provider>
   );
 };
 
