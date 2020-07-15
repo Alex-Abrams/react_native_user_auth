@@ -35,6 +35,12 @@ node_modules/
 npm-debug.log
 yarn-error.log
 
+bundle.js
+bundle.js*
+bundle.js.map
+node_modules
+node_modules/
+
 # BUCK
 buck-out/
 \.buckd/

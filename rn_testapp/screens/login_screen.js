@@ -78,6 +78,7 @@ _deleteData = async () => {
     );
   }
   //WORKS!!
+  // ALSO THIS WORKS SO HARD!!!!! ITS IN ASYNC STORAGE
   _signInHandler() {
     // this.props.authActions.getThatToken(this.state.email, this.state.password);
     this.props.authActions.getThatToken(this.state.email, this.state.password)
@@ -87,7 +88,7 @@ _deleteData = async () => {
 
 
 /// testing some async storage stuff
-  testAsyncSet() {
+  testAsyncSet() { //this is unnecessary cant delete later
     return(
       <View>
         <Button

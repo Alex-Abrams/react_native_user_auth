@@ -17,6 +17,12 @@
 /storage/*
 !/storage/.keep
 
+bundle.js
+bundle.js*
+bundle.js.map
+node_modules
+node_modules/
+
 .byebug_history
 
 # Ignore master key for decrypting credentials and more.
