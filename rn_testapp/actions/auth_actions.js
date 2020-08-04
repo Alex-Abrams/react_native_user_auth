@@ -4,9 +4,14 @@ export const FAILED_LOGIN = 'FAILED_LOGIN';
 export const RECEIVE_AUTH_TOKEN = "RECEIVE_AUTH_TOKEN";
 export const LOGGED_IN_USER = "LOGGED_IN_USER";
 export const IS_LOGGED_IN = "IS_LOGGED_IN";
+export const LOGOUT_USER = "LOGOUT_USER";
+export const REQEUST_USER_INFO = "REQEUST_USER_INFO"
 import fetch from 'cross-fetch';
 import { AsyncStorage } from 'react-native';
 
+export const logoutCurrentUser = () => ({
+  type: LOGOUT_USER,
+}); // the new stuff
 
 export const receiveCurrentUser = currentUser => ({
   type: RECEIVE_CURRENT_USER,
@@ -28,6 +33,42 @@ export const isLoggedIn = loggedIn => ({
   loggedIn
 });
 
+export const requestUserInfo = currentUser => ({
+  type: REQEUST_USER_INFO,
+  currentUser
+});
+
+////// curl -H "Content-Type: application/json" -X POST -d '{"email":"alex@gmail.com","password":"password"}' http://localhost:3000/authenticate
+//// curl -H "Content-Type: application/json" -X POST -d '{"email":"email","password":"password"}' http://localhost:3000/authenticate
+/////// curl -H "Authorization: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo1LCJleHAiOjE1OTY2NTU3MTF9.qlABR9TohQSaOL3v5oylkTJVjEtd9xnZJfmalNabiHM" http://localhost:3000/items
+/////// curl -H "Authorization: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE1OTY1NjM1MzJ9.LWU4L74MijaJZnPSsnE6u70oer_xCc0TSxjOCCNtvE8" http://localhost:3000/users/alex@gmail.com
+///// curl -H "Authorization: eyJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjo0LCJleHAiOjE1OTYyMTg5MDJ9.LPb94Upmhop1yN51JatUvEJFnqJW_6XoUZgwul-ygRM" http://localhost:3000/users/4
+
+//// User.create!(email: 'email' , password: 'password' , password_confirmation: 'password')
+
+// this functions hould retreive the user's email using the authentication code
+export function getUserInfo(email, auth_token) {
+  return function action(dispatch) {
+    const request = fetch(`http://10.0.2.2:3000/users/${email}`, {
+      method: 'GET',
+        headers: {
+          "Authorization": auth_token
+        }
+    });
+
+    return request.then(
+      // response => response.json(), // eventually want this
+      response => console.log("getuserinfo response", respone.json()),
+      // response => console.log("response STATUS: ", response.status), // response.status == 200 is what we want
+      err => console.log('get usershit error: ', err)
+    )
+    .then(
+      json => console.log("userrequester: ", json),
+      err => console.log("userrequester error", err) // review this nonsenjsew!!!!~!
+    );
+  }
+}
+
 
 ////
 //// WINNNNNNNNER!!!!!!!!!
@@ -48,6 +89,7 @@ export function getThatToken(email, password) {
     return request.then(
       // response => console.log("REQUQEST!: ", response.json().auth_token),
       response => response.json(),
+      // response => console.log("praying for an id", response.json()),
       err => console.log("error!!: ", err)
     ) //;
     .then(
@@ -59,7 +101,7 @@ export function getThatToken(email, password) {
 
   }
 }
-////
+//// /// kukugugukacao
 //// also winner
 export function getThoseItems(auth_token) {
   return function action(dispatch) {
@@ -79,7 +121,7 @@ export function getThoseItems(auth_token) {
     )
     .then(
       json => console.log("the items: ", json),
-      err => console.log("items json error", err)
+      err => console.log("items json error", err) // review this nonsenjsew!!!!~!
     );
   }
 }
@@ -98,7 +140,7 @@ export function checkLoggedIn(auth_token) {
 
     return request.then(
       // response => { return response.status == 200 ? true : false },
-      response => { response.status == 200 ? dispatch(isLoggedIn(true)) : dispatch(isLoggedIn(null))},
+      response => { response.status == 200 ? dispatch(isLoggedIn(true)) : dispatch(isLoggedIn(false))},
       err => console.log("checkLoggedIn error", err)
     );
   }
@@ -123,7 +165,7 @@ export function sendToken(auth_token_two) {
 }
 
 
-/////
+///////////////////////////////////////////////////////////////////////////////////////
 
 //////// below here not in use
 export function fetchToken() {

@@ -130,13 +130,20 @@ _deleteData = async () => {
     );
   }
 
+  // retreiveUserInfo() {
+  //   this.props.authActions.getUserInfo()
+  // }
+
+  /// this here is my tetss for getting user information, and using that to ping the server to check async
+
+
 
   /////// end some async storage stuff
 
   // {this.getUserToken()}
   // {this.reqItems()}
   render() {
-    // console.log(this.props);
+    console.log("userlogtest", this.props);
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
         <Hoshi

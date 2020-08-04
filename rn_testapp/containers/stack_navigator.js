@@ -35,47 +35,53 @@ class FarStack extends React.Component {
         return value;
 
       }
+      // 18337640566
     } catch (error) {
       // Error retrieving data
     }
-  };
+  }; //
 
   componentDidMount() {
     this._retrieveData()
     // .then(response => console.log("responseyboy", response)); /// has possiblities
     .then(response => this.setState({auth_token: response}));
-
-    console.log("stateyboy: ", this.state);
-
+    // console.log("stateyboy: ", this.state); // does not show up in this.state here
   }
 
-  getResponse() {
-    this.props.authActions.checkLoggedIn(this.state.auth_token)
-    // .then(response => console.log("responseyfailsucc: ", response)); // send this to this.setState
-    .then(response => response);
-    // .then(response => this.setState({validAuthToken: response})); /// infiniite loop
-  }
+  // getResponse() {
+  //   this.props.authActions.checkLoggedIn(this.state.auth_token)
+  //   // .then(response => console.log("responseyfailsucc: ", response)); // send this to this.setState
+  //   .then(response => response);
+  //   // .then(response => this.setState({validAuthToken: response})); /// infiniite loop
+  // }
 
 
   render() {
     const Stack = createStackNavigator();
+    const { loggedIn } = this.props;
     // console.log("authyboy:", this.state.auth_token);
     this.props.authActions.sendToken(this.state.auth_token); // bread and butter right here
+                                                            // sends to auth token two
 
-    console.log("PORPS: ", this.props);
+    // console.log("PORPS: ", this.props);
+    // hdu wajk kajwdi  jhaidjh ihhhk akydij kajhjh kkhwd khh khwd njhwkh kahdhkhkh a
+    //
+    this.props.authActions.checkLoggedIn(this.state.auth_token); // dispatches the true/false thing
 
-    const inOrOut = this.props.authActions.checkLoggedIn(this.state.auth_token);
-
-    console.log("inOrOut!!!: ", inOrOut);
+    // console.log("inOrOut!!!: ", inOrOut);
+    // i can do it if i just believe in myself and focus and try to be the best i can be!
+    // not sitting around in self pity!
 
     // {this.getResponse()}
     // {console.log("authyboy:", this.state.auth_token)}
+    // {(loggedIn) ? console.log("true") : console.log("false")}
+    // <Stack.Screen name="home" component={Home} />
     return (
       <Stack.Navigator>
-      {this.state.auth_token.length > 0 ? (
+      {(loggedIn) ? (
         <Stack.Screen name="login" component={LoginContainer} />
       ) : (
-        <Stack.Screen name="home" component={Home} />
+        <Stack.Screen name="login" component={LoginContainer} />
       )}
 
 
