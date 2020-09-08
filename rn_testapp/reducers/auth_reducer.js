@@ -4,6 +4,7 @@ import {
   IS_LOGGED_IN,
   LOGOUT_USER,
   REQEUST_USER_INFO,
+  REQUEST_EMAIL, // should async the email as well
 } from '../actions/auth_actions';
 
 import merge from 'lodash/merge';
@@ -17,6 +18,7 @@ const _nullUser = Object.freeze({
   auth_token_two: null,
   auth_token: null,
   user: null,
+  user_email: null,
 });
 
 const authReducer = (state = INITIAL_STATE, action) => {
@@ -33,7 +35,10 @@ const authReducer = (state = INITIAL_STATE, action) => {
       // basically want to remove any auth_tokens from the state, doesnt matter if still in datbase
       return _nullUser;
     case REQEUST_USER_INFO:
-      return merge({}, state, { user: action.currentUser } )
+      return merge({}, state, { user: action.currentUser });
+
+    case REQUEST_EMAIL:
+      return merge({}, state, { user_email: action.email });
     default:
       return state;
   }

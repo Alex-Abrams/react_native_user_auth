@@ -5,7 +5,8 @@ export const RECEIVE_AUTH_TOKEN = "RECEIVE_AUTH_TOKEN";
 export const LOGGED_IN_USER = "LOGGED_IN_USER";
 export const IS_LOGGED_IN = "IS_LOGGED_IN";
 export const LOGOUT_USER = "LOGOUT_USER";
-export const REQEUST_USER_INFO = "REQEUST_USER_INFO"
+export const REQEUST_USER_INFO = "REQEUST_USER_INFO";
+export const REQUEST_EMAIL = "REQUEST_EMAIL";
 import fetch from 'cross-fetch';
 import { AsyncStorage } from 'react-native';
 
@@ -23,11 +24,12 @@ export const receiveAuthToken = auth_token => ({
   auth_token
 });
 
+/// garbo delete later
 export const loggedInUser = auth_token_two => ({
   type: LOGGED_IN_USER,
   auth_token_two
 });
-
+///
 export const isLoggedIn = loggedIn => ({
   type: IS_LOGGED_IN,
   loggedIn
@@ -36,6 +38,11 @@ export const isLoggedIn = loggedIn => ({
 export const requestUserInfo = currentUser => ({
   type: REQEUST_USER_INFO,
   currentUser
+});
+
+export const requestEmail = email => ({
+  type: REQUEST_EMAIL,
+  email,
 });
 
 ////// curl -H "Content-Type: application/json" -X POST -d '{"email":"alex@gmail.com","password":"password"}' http://localhost:3000/authenticate
@@ -58,7 +65,8 @@ export function getUserInfo(email, auth_token) {
 
     return request.then(
       // response => response.json(), // eventually want this
-      response => console.log("getuserinfo response", respone.json()),
+      // response => console.log("getuserinfo response", response.json()), /// this returns a promise atm so its good
+      response => response.json(),
       // response => console.log("response STATUS: ", response.status), // response.status == 200 is what we want
       err => console.log('get usershit error: ', err)
     )
@@ -161,6 +169,36 @@ export function sendToken(auth_token_two) {
       response => dispatch(loggedInUser({auth_token_two})),
       err => console.log("checkLoggedIn error", err)
     );
+  }
+}
+
+////// testing for the fun  things, this should eventually be deleted
+export function testCommand(email, password) {
+  return function action(dispatch) {
+    const request = fetch('http://10.0.2.2:3000/authenticate', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: `${email}`,
+        password: `${password}`
+      })
+    });
+
+    return request.then(
+      // response => console.log("REQUQEST!: ", response.json().auth_token),
+      response => response.json(),
+      // response => console.log("testCommandresponse: ", response.json()),
+      // response => console.log("praying for an id", response.json()),
+      err => console.log("error!!: ", err)
+    )
+    .then(
+      json => console.log("testCommandjson: ", json.user.email),
+      err => console.log("jsonerror ", json)
+    );
+
   }
 }
 

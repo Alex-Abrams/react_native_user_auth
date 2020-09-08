@@ -21,7 +21,7 @@ class FarStack extends React.Component {
 
   _retrieveData = async () => {
     try {
-      const value = await AsyncStorage.getItem('testkey');
+      const value = await AsyncStorage.getItem('token'); // was 'auth_token'
       if (value !== null) {
         // We have data!!
         // this.props.authActions.checkLoggedIn(value);  //needs work // problem it likes splits the string
@@ -55,18 +55,25 @@ class FarStack extends React.Component {
   //   // .then(response => this.setState({validAuthToken: response})); /// infiniite loop
   // }
 
+  sendEmailAndToken() {
+    // this should send the async email and async token to the store if loggedIn === true
+  }
+
 
   render() {
     const Stack = createStackNavigator();
     const { loggedIn } = this.props;
+    console.log("tiddies");
     // console.log("authyboy:", this.state.auth_token);
-    this.props.authActions.sendToken(this.state.auth_token); // bread and butter right here
+
+
+    // this.props.authActions.sendToken(this.state.auth_token); // bread and butter right here
                                                             // sends to auth token two
 
     // console.log("PORPS: ", this.props);
     // hdu wajk kajwdi  jhaidjh ihhhk akydij kajhjh kkhwd khh khwd njhwkh kahdhkhkh a
     //
-    this.props.authActions.checkLoggedIn(this.state.auth_token); // dispatches the true/false thing
+    // this.props.authActions.checkLoggedIn(this.state.auth_token); // dispatches the true/false thing
 
     // console.log("inOrOut!!!: ", inOrOut);
     // i can do it if i just believe in myself and focus and try to be the best i can be!
