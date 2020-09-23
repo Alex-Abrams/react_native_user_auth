@@ -2,10 +2,11 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React, { Component } from 'react';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage, Navigator } from 'react-native';
 
 import LoginContainer from './login_screen_container';
 import Home from '../screens/home_screen';
+import SignupContainer from './signup_container';
 
 import { receiveAuthToken, getThoseItems } from '../actions/auth_actions';
 
@@ -15,11 +16,10 @@ class FarStack extends React.Component {
 
     this.state = {
       auth_token: '',
-      validAuthToken: false,
     };
   }
 
-  _retrieveData = async () => {
+  _retrieveData = async () => { // $delete$
     try {
       const value = await AsyncStorage.getItem('token'); // was 'auth_token'
       if (value !== null) {
@@ -41,54 +41,84 @@ class FarStack extends React.Component {
     }
   }; //
 
+
+  // -------------------------------------------------------------------
+  // keep, explain with comments later $explain$
+  _retrieveStorageToken = async () => {
+    try {
+      const auth_token = await AsyncStorage.getItem('token');
+      if (auth_token !== null) {
+        // We have data!!
+        console.log("_retrieveStorageToken ", auth_token);
+        // this, unlike _storeData, needs to dispatch the token
+        this.props.authActions.receiveAuthToken({auth_token});
+      } else {
+        console.log("no data woo"); //dispatch null
+        this.props.authActions.receiveAuthToken(null);
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  // copy from login_screen
+  _retrieveStorageEmail = async () => {
+    try {
+      const value = await AsyncStorage.getItem('email');
+      if (value !== null) {
+        // We have data!! adwa
+        console.log("_retrieveEmail ", value);
+        this.props.authActions.requestEmail(value);
+        // return value;
+      } else {
+        console.log("no data woo"); //dispatch null
+        this.props.authActions.requestEmail(null);
+      }
+
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  // -------------------------------------------------------------------
+
   componentDidMount() {
+    // ------------------------------------------------------ $delete$
     this._retrieveData()
-    // .then(response => console.log("responseyboy", response)); /// has possiblities
     .then(response => this.setState({auth_token: response}));
-    // console.log("stateyboy: ", this.state); // does not show up in this.state here
+    console.log("componentDidMount");
+    // ------------------------------------------------------
+
+    this._retrieveStorageToken();
+    this._retrieveStorageEmail();
+    this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
+    console.log("PROPPERS", this.props);
   }
 
-  // getResponse() {
-  //   this.props.authActions.checkLoggedIn(this.state.auth_token)
-  //   // .then(response => console.log("responseyfailsucc: ", response)); // send this to this.setState
-  //   .then(response => response);
-  //   // .then(response => this.setState({validAuthToken: response})); /// infiniite loop
-  // }
-
-  sendEmailAndToken() {
-    // this should send the async email and async token to the store if loggedIn === true
+  componentDidUpdate(prevProps) {
+    if (this.props.auth_token !== prevProps.auth_token) {
+      this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
+    }
   }
-
 
   render() {
     const Stack = createStackNavigator();
     const { loggedIn } = this.props;
-    console.log("tiddies");
-    // console.log("authyboy:", this.state.auth_token);
+    console.log(loggedIn);
 
 
-    // this.props.authActions.sendToken(this.state.auth_token); // bread and butter right here
-                                                            // sends to auth token two
-
-    // console.log("PORPS: ", this.props);
-    // hdu wajk kajwdi  jhaidjh ihhhk akydij kajhjh kkhwd khh khwd njhwkh kahdhkhkh a
-    //
-    // this.props.authActions.checkLoggedIn(this.state.auth_token); // dispatches the true/false thing
-
-    // console.log("inOrOut!!!: ", inOrOut);
-    // i can do it if i just believe in myself and focus and try to be the best i can be!
-    // not sitting around in self pity!
-
-    // {this.getResponse()}
-    // {console.log("authyboy:", this.state.auth_token)}
-    // {(loggedIn) ? console.log("true") : console.log("false")}
-    // <Stack.Screen name="home" component={Home} />
     return (
       <Stack.Navigator>
       {(loggedIn) ? (
-        <Stack.Screen name="login" component={LoginContainer} />
+        <>
+        <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
+        <Stack.Screen name="signup" component={SignupContainer} />
+        </>
       ) : (
-        <Stack.Screen name="login" component={LoginContainer} />
+        <>
+        <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
+        <Stack.Screen name="signup" component={SignupContainer} />
+        </>
       )}
 
 

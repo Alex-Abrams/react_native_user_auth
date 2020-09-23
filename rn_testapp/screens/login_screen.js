@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { View, Button, Text } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
 import { AsyncStorage } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
 
 class Login extends React.Component {
   constructor(props) {
@@ -60,29 +61,30 @@ _retrieveData = async () => {
     const value = await AsyncStorage.getItem('token');
     if (value !== null) {
       // We have data!!
-      console.log(value);
+      console.log("_retrieveData ", value);
       // this, unlike _storeData, needs to dispatch the token
       this.props.authActions.receiveAuthToken(value);
     } else {
       console.log("no data woo"); //dispatch null
-      this.props.authActions.receiveAuthToken(null);
+      this.props.authActions.receiveAuthToken(null); // might actually need to be an error action instead
     }
   } catch (error) {
     // Error retrieving data
   }
 };
+
 
 _retrieveEmail = async () => {
   try {
     const value = await AsyncStorage.getItem('email');
     if (value !== null) {
       // We have data!!
-      console.log(value);
+      console.log("_retrieveEmail ", value);
       this.props.authActions.requestEmail(value);
       // return value;
     } else {
       console.log("no data woo"); //dispatch null
-      this.props.authActions.requestEmail(null);
+      this.props.authActions.requestEmail(null);  // might actually need to be an error action instead
     }
   } catch (error) {
     // Error retrieving data
@@ -90,15 +92,65 @@ _retrieveEmail = async () => {
 };
 
 
-_deleteData = async () => {
+userLogout = async () => {  // formally deleteData
   try {
-    await AsyncStorage.removeItem(
-      'token'
-    );
+    let keys = ['token', 'email'];
+    await AsyncStorage.multiRemove(keys);
+    this.props.authActions.logoutCurrentUser();
   } catch (error) {
     // Error saving data
+    console.log("userLogout: ", error);
   }
 };
+
+
+// testing the delete multi keys---------------------------------------------------------------------- $delete$
+_testFindEmail = async () => {
+  try {
+    const value = await AsyncStorage.getItem('email');
+    if (value !== null) {
+      // We have data!!
+      console.log("_testFindEmail ", value);
+      // this.props.authActions.requestEmail(value);
+      // return value;
+    } else {
+      console.log("no email sick"); //dispatch null
+      // this.props.authActions.requestEmail(null);  // might actually need to be an error action instead
+    }
+  } catch (error) {
+    // Error retrieving data
+  }
+};
+
+_testFindToken = async () => { // $delete$
+  try {
+    const value = await AsyncStorage.getItem('token');
+    if (value !== null) {
+      // We have data!!
+      console.log("_testFindToken ", value);
+      // this.props.authActions.requestEmail(value);
+      // return value;
+    } else {
+      console.log("no token sick"); //dispatch null
+      // this.props.authActions.requestEmail(null);  // might actually need to be an error action instead
+    }
+  } catch (error) {
+    // Error retrieving data
+  }
+};
+
+testEmailTokenGetter() { // $delete$
+  return(
+    <View>
+      <Button
+        title="Email/Token Get"
+        color="purple"
+        onPress={() => { this._testFindEmail(); this._testFindToken(); }}>
+      </Button>
+    </View>
+  );
+}
+// ----------------------------------------------------------------------
 
   // WORKS
   reqItems() {
@@ -153,14 +205,14 @@ _deleteData = async () => {
     );
   }
 
-  testAsyncDelete() {
+  logoutButton() {
     return(
       <View>
         <Button
-          title="delete storage"
+          title="logout"
           color="green"
           onPress={() => {
-            this._deleteData();
+            this.userLogout();
           }}>
           </Button>
       </View>
@@ -195,6 +247,18 @@ _deleteData = async () => {
     );
   }
 
+  toSignup({ navigation }) {
+    return(
+      <View>
+        <Button
+          title="New User"
+          color="purple"
+          onPress={() => this.props.navigation.navigate('signup')}
+          >
+        </Button>
+      </View>
+    );
+  }
 
   /// this here is my tetss for getting user information, and using that to ping the server to check async
 
@@ -204,6 +268,13 @@ _deleteData = async () => {
 
   // {this.getUserToken()}
   // {this.reqItems()}
+  // {this.retrieveUserInfo("email", this.props.auth_token)}
+  // {this.reqItems()}
+  // {this.testAsyncGet()}
+  // {this.emailGetter()}
+  // {this.testEmailTokenGetter()}
+
+
   render() {
 
     // const email_get = this._retrieveEmail();
@@ -240,11 +311,8 @@ _deleteData = async () => {
           onPress={() => {this._signInHandler(this.state.email, this.state.password); this._storeEmail(this.state.email);}
         }/>
 
-        {this.reqItems()}
-        {this.testAsyncGet()}
-        {this.testAsyncDelete()}
-        {this.retrieveUserInfo("email", this.props.auth_token)}
-        {this.emailGetter()}
+        {this.logoutButton()}
+        {this.toSignup(this.props.navigation)}
       </View>
     );
   }

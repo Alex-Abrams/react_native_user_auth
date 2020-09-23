@@ -5,8 +5,9 @@ import * as authActions from '../actions/auth_actions';
 
 const mapStateToProps = state => ({
   auth_token: state.auth_token,
-  auth_token_two: state.auth_token_two,
   loggedIn: state.loggedIn,
+  // loggedIn: "containersprinklers", // works here but not in reducer
+  email: state.email,
 });
 
 const mapDispatchToProps = dispatch => ({

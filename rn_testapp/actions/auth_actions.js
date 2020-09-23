@@ -54,6 +54,7 @@ export const requestEmail = email => ({
 //// User.create!(email: 'email' , password: 'password' , password_confirmation: 'password')
 
 // this functions hould retreive the user's email using the authentication code
+//// in use $explain$
 export function getUserInfo(email, auth_token) {
   return function action(dispatch) {
     const request = fetch(`http://10.0.2.2:3000/users/${email}`, {
@@ -64,11 +65,9 @@ export function getUserInfo(email, auth_token) {
     });
 
     return request.then(
-      // response => response.json(), // eventually want this
-      // response => console.log("getuserinfo response", response.json()), /// this returns a promise atm so its good
-      response => response.json(),
+      response => { response.status == 200 ? dispatch(isLoggedIn(true)) : dispatch(isLoggedIn(false))},
       // response => console.log("response STATUS: ", response.status), // response.status == 200 is what we want
-      err => console.log('get usershit error: ', err)
+      err => console.log('get userinfo error ', err)
     )
     .then(
       json => console.log("userrequester: ", json),
@@ -79,7 +78,7 @@ export function getUserInfo(email, auth_token) {
 
 
 ////
-//// WINNNNNNNNER!!!!!!!!!
+//// in use $explain$
 export function getThatToken(email, password) {
   return function action(dispatch) {
     const request = fetch('http://10.0.2.2:3000/authenticate', {
@@ -109,8 +108,14 @@ export function getThatToken(email, password) {
 
   }
 }
+
+
+///
+/// sign UP function
+
+
 //// /// kukugugukacao
-//// also winner
+//// not currently in use
 export function getThoseItems(auth_token) {
   return function action(dispatch) {
     const request = fetch("http://10.0.2.2:3000/items", {
@@ -155,7 +160,7 @@ export function checkLoggedIn(auth_token) {
 }
 
 
-//// working and in use
+//// not in use
 export function sendToken(auth_token_two) {
   return function action(dispatch) {
     const request = fetch("http://10.0.2.2:3000/items", {

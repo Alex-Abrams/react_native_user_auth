@@ -11,22 +11,22 @@ import merge from 'lodash/merge';
 
 const INITIAL_STATE = {
   isLoading: false,
+  loggedIn: false,
 };
 
 const _nullUser = Object.freeze({
-  loggedIn: null,
-  auth_token_two: null,
+  loggedIn: false,
   auth_token: null,
-  user: null,
   user_email: null,
 });
 
-const authReducer = (state = INITIAL_STATE, action) => {
+const authReducer = (state = { loggedIn: false }, action) => {
   Object.freeze(state);
 
   switch(action.type) {
     case RECEIVE_AUTH_TOKEN:
       return merge({}, state, action.auth_token);
+      // return merge({}, state, { auth_token: action.auth_token });
     case LOGGED_IN_USER:
       return merge({}, state, action.auth_token_two);
     case IS_LOGGED_IN:

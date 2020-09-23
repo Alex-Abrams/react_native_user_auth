@@ -5,6 +5,7 @@ import {
   View,
   Text,
   StatusBar,
+  Navigator
 } from 'react-native';
 
 import { NavigationContainer } from '@react-navigation/native';
