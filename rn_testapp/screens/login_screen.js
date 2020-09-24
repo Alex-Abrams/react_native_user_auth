@@ -92,7 +92,7 @@ _retrieveEmail = async () => {
 };
 
 
-userLogout = async () => {  // formally deleteData
+userLogout = async () => {  // 
   try {
     let keys = ['token', 'email'];
     await AsyncStorage.multiRemove(keys);
@@ -260,25 +260,10 @@ testEmailTokenGetter() { // $delete$
     );
   }
 
-  /// this here is my tetss for getting user information, and using that to ping the server to check async
-
-
-
-  /////// end some async storage stuff
-
-  // {this.getUserToken()}
-  // {this.reqItems()}
-  // {this.retrieveUserInfo("email", this.props.auth_token)}
-  // {this.reqItems()}
-  // {this.testAsyncGet()}
-  // {this.emailGetter()}
-  // {this.testEmailTokenGetter()}
 
 
   render() {
 
-    // const email_get = this._retrieveEmail();
-    // const token_get = this._retrieveData();
 
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>

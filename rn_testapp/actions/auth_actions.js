@@ -10,6 +10,7 @@ export const REQUEST_EMAIL = "REQUEST_EMAIL";
 import fetch from 'cross-fetch';
 import { AsyncStorage } from 'react-native';
 
+
 export const logoutCurrentUser = () => ({
   type: LOGOUT_USER,
 }); // the new stuff
@@ -112,7 +113,28 @@ export function getThatToken(email, password) {
 
 ///
 /// sign UP function
+export function signupUser(email, password, password_confirmation) {
+  return function action(dispatch) {
+    const request = fetch('http://10.0.2.2:3000/users', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        email: `${email}`,
+        password: `${password}`,
+        password_confirmation: `${password_confirmation}`
+      })
+    });
 
+    return request.then(
+      response => console.log("singupUser action test", response.json()),
+      err => console.log("singupUser test failed")
+    );
+
+  }
+}
 
 //// /// kukugugukacao
 //// not currently in use

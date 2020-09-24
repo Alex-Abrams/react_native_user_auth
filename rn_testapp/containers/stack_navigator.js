@@ -99,6 +99,7 @@ class FarStack extends React.Component {
     if (this.props.auth_token !== prevProps.auth_token) {
       this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
     }
+    console.log("componentDidUpdate");
   }
 
   render() {
@@ -109,15 +110,15 @@ class FarStack extends React.Component {
 
     return (
       <Stack.Navigator>
-      {(loggedIn) ? (
+      {(loggedIn == false) ? (
         <>
         <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-        <Stack.Screen name="signup" component={SignupContainer} />
+        <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
         </>
       ) : (
         <>
         <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-        <Stack.Screen name="signup" component={SignupContainer} />
+        <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
         </>
       )}
 

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, Button, Text } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
+import { AsyncStorage } from 'react-native';
 
 class Signup extends React.Component {
   constructor(props) {
@@ -14,6 +15,76 @@ class Signup extends React.Component {
 
   }
 
+  _storeData = async (auth_token) => {
+    console.log("toooooooooooooooooooooooooooooooooooooooooken");
+  try {
+    await AsyncStorage.setItem(
+      'token',
+      `${auth_token}`
+    );
+
+    this.props.authActions.requestEmail(this.state.email);
+    // doesnt need dispatch to store here
+     // \
+  } catch (error) {
+    // Error saving data
+  }
+};
+
+_storeEmail = async (email) => {
+  console.log("emaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaail");
+  try {
+    await AsyncStorage.setItem(
+      'email',
+      `${email}`
+    );
+    this.props.authActions.requestEmail(email);
+  } catch (error) {
+    // Error saving data
+  }
+};
+
+  _signUpHandler() {
+    this.props.authActions.signupUser(this.state.email, this.state.password, this.state.password_confirmation)
+    .then(() => this.props.authActions.getThatToken(this.state.email, this.state.password))
+    .then(auth_token => this._storeData("SINGHANDLE TOKEN", auth_token.auth_token.auth_token))
+    .then(() => this.props.authActions.isLoggedIn(true))
+    .then(() => this._storeEmail(this.state.email)); //auth_token x 3??
+
+
+  }
+
+
+  _testFindEmail = async () => {
+    try {
+      const value = await AsyncStorage.getItem('email');
+      if (value !== null) {
+        // We have data!!
+        console.log("_testFindEmail ", value);
+        // this.props.authActions.requestEmail(value);
+        // return value;
+      } else {
+        console.log("no email sick"); //dispatch null
+        // this.props.authActions.requestEmail(null);  // might actually need to be an error action instead
+      }
+    } catch (error) {
+      // Error retrieving data
+    }
+  };
+
+  emailGetter() {
+    return(
+      <View>
+        <Button
+          title="email get"
+          color="purple"
+          onPress={() => {
+            this._testFindEmail();
+          }}>
+        </Button>
+      </View>
+    );
+  }
 
   render() {
     return(
@@ -38,7 +109,7 @@ class Signup extends React.Component {
           label={'Confirm Password'}
           borderColor={'#b76c94'}
           backgroundColor={'#FFF'}
-          onChangeText={password => this.setState({password_confirmation})}
+          onChangeText={password_confirmation => this.setState({password_confirmation})}
           >
         </Hoshi>
 
@@ -52,7 +123,10 @@ class Signup extends React.Component {
             marginTop: 10
           }}
           styleDisabled={{ color: 'red' }}
+          onPress={() => this._signUpHandler()}
         />
+
+      {this.emailGetter()}
         </View>
     );
   }
