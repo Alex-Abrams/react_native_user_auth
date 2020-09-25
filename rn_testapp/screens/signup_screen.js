@@ -50,8 +50,6 @@ _storeEmail = async (email) => {
     .then(auth_token => this._storeData("SINGHANDLE TOKEN", auth_token.auth_token.auth_token))
     .then(() => this.props.authActions.isLoggedIn(true))
     .then(() => this._storeEmail(this.state.email)); //auth_token x 3??
-
-
   }
 
 

@@ -5,8 +5,9 @@ import React, { Component } from 'react';
 import { AsyncStorage, Navigator } from 'react-native';
 
 import LoginContainer from './login_screen_container';
-import Home from '../screens/home_screen';
+import HomeContainer from '../containers/home_container';
 import SignupContainer from './signup_container';
+
 
 import { receiveAuthToken, getThoseItems } from '../actions/auth_actions';
 
@@ -18,29 +19,6 @@ class FarStack extends React.Component {
       auth_token: '',
     };
   }
-
-  _retrieveData = async () => { // $delete$
-    try {
-      const value = await AsyncStorage.getItem('token'); // was 'auth_token'
-      if (value !== null) {
-        // We have data!!
-        // this.props.authActions.checkLoggedIn(value);  //needs work // problem it likes splits the string
-        // this.props.authActions.geThoseItems(value);
-        // console.log("_retrieveData value: ", value); //works
-        // this.setState({auth_token: value}); // causes some king of inifinite looop
-        return value;
-      } else {
-        // console.log("fart", value); // value is definitlyt null
-        // this.setState({auth_token: value});
-        return value;
-
-      }
-      // 18337640566
-    } catch (error) {
-      // Error retrieving data
-    }
-  }; //
-
 
   // -------------------------------------------------------------------
   // keep, explain with comments later $explain$
@@ -83,33 +61,27 @@ class FarStack extends React.Component {
   // -------------------------------------------------------------------
 
   componentDidMount() {
-    // ------------------------------------------------------ $delete$
-    this._retrieveData()
-    .then(response => this.setState({auth_token: response}));
-    console.log("componentDidMount");
-    // ------------------------------------------------------
-
     this._retrieveStorageToken();
     this._retrieveStorageEmail();
     this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
     console.log("PROPPERS", this.props);
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.auth_token !== prevProps.auth_token) {
-      this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
-    }
-    console.log("componentDidUpdate");
-  }
+  // componentDidUpdate(prevProps) {  // come back to this it might not work out, but things seem
+                                      // ok with out it, have to test full async rejoin later
+  //   if (this.props.auth_token !== prevProps.auth_token) {
+  //     this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
+  //   }
+  //   console.log("componentDidUpdate");
+  // }
 
   render() {
     const Stack = createStackNavigator();
     const { loggedIn } = this.props;
-    console.log(loggedIn);
 
 
     return (
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="login">
       {(loggedIn == false) ? (
         <>
         <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
@@ -117,8 +89,7 @@ class FarStack extends React.Component {
         </>
       ) : (
         <>
-        <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-        <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
+        <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
         </>
       )}
 
