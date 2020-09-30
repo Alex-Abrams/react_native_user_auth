@@ -14,10 +14,6 @@ import { receiveAuthToken, getThoseItems } from '../actions/auth_actions';
 class FarStack extends React.Component {
   constructor(props) {
     super(props);
-
-    this.state = {
-      auth_token: '',
-    };
   }
 
   // -------------------------------------------------------------------
@@ -26,12 +22,8 @@ class FarStack extends React.Component {
     try {
       const auth_token = await AsyncStorage.getItem('token');
       if (auth_token !== null) {
-        // We have data!!
-        console.log("_retrieveStorageToken ", auth_token);
-        // this, unlike _storeData, needs to dispatch the token
         this.props.authActions.receiveAuthToken({auth_token});
       } else {
-        console.log("no data woo"); //dispatch null
         this.props.authActions.receiveAuthToken(null);
       }
     } catch (error) {
@@ -44,12 +36,9 @@ class FarStack extends React.Component {
     try {
       const value = await AsyncStorage.getItem('email');
       if (value !== null) {
-        // We have data!! adwa
-        console.log("_retrieveEmail ", value);
         this.props.authActions.requestEmail(value);
         // return value;
       } else {
-        console.log("no data woo"); //dispatch null
         this.props.authActions.requestEmail(null);
       }
 
@@ -64,7 +53,6 @@ class FarStack extends React.Component {
     this._retrieveStorageToken();
     this._retrieveStorageEmail();
     this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
-    console.log("PROPPERS", this.props);
   }
 
   // componentDidUpdate(prevProps) {  // come back to this it might not work out, but things seem
@@ -79,17 +67,16 @@ class FarStack extends React.Component {
     const Stack = createStackNavigator();
     const { loggedIn } = this.props;
 
-
     return (
       <Stack.Navigator initialRouteName="login">
-      {(loggedIn == false) ? (
+      {(loggedIn == true) ? (
         <>
-        <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-        <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
+        <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
         </>
       ) : (
         <>
-        <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
+        <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
+        <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
         </>
       )}
 
