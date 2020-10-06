@@ -11,6 +11,7 @@ class Signup extends React.Component {
       email: '',
       password: '',
       password_confirmation: '',
+      token: '',
     };
 
   }
@@ -45,11 +46,22 @@ _storeEmail = async (email) => {
 };
 
   _signUpHandler() {
+    this.props.authActions.loadSplashScreen(true);
+
     this.props.authActions.signupUser(this.state.email, this.state.password, this.state.password_confirmation)
     .then(() => this.props.authActions.getThatToken(this.state.email, this.state.password))
-    .then(auth_token => this._storeData("SINGHANDLE TOKEN", auth_token.auth_token.auth_token))
-    .then(() => this.props.authActions.isLoggedIn(true))
-    .then(() => this._storeEmail(this.state.email)); //auth_token x 3??
+    // .then(auth_token => this._storeData(auth_token.auth_token.auth_token)) // original
+    .then((auth_token) => {
+      this._storeData(auth_token.auth_token.auth_token);
+      this.setState({ token: auth_token.auth_token.auth_token });
+    })
+    .then(() => this._storeEmail(this.state.email))
+    .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token))
+    .then(() => this.props.authActions.loadSplashScreen(false));
+
+    // .then(() => this.props.authActions.isLoggedIn(true));
+
+    // this.props.authActions.loadSplashScreen(false);
   }
 
 

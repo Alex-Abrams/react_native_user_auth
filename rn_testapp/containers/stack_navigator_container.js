@@ -6,7 +6,7 @@ import * as authActions from '../actions/auth_actions';
 const mapStateToProps = state => ({
   auth_token: state.auth_token,
   loggedIn: state.loggedIn,
-  // loggedIn: "containersprinklers", // works here but not in reducer
+  splash_screen: state.splash_screen,
   email: state.email,
 });
 

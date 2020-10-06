@@ -12,6 +12,7 @@ class Login extends React.Component {
     this.state = {
       email: '',
       password: '',
+      token: '',
     };
   }
 
@@ -58,10 +59,19 @@ userLogout = async () => {  //
   //WORKS!!
   // ALSO THIS WORKS SO HARD!!!!! ITS IN ASYNC STORAGE
   _signInHandler() {
-    // this.props.authActions.getThatToken(this.state.email, this.state.password);
+    this.props.authActions.loadSplashScreen(true);
+
     this.props.authActions.getThatToken(this.state.email, this.state.password)
-    .then(auth_token => this._storeData(auth_token.auth_token.auth_token))
-    .then(() => this.props.authActions.isLoggedIn(true))
+    .then((auth_token) => {
+      this._storeData(auth_token.auth_token.auth_token);
+      console.log("the trip token: ", auth_token.auth_token.auth_token);
+      this.setState({ token: auth_token.auth_token.auth_token });
+    })
+    .then(() => this.props.authActions.requestEmail(this.state.email))
+    // .then(auth_token => this._storeData(auth_token.auth_token.auth_token)) //oringal
+    // .then(() => this.props.authActions.isLoggedIn(true)); //orginal
+    .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token))
+    .then(() => this.props.authActions.loadSplashScreen(false));
 
   }
 
@@ -96,7 +106,7 @@ userLogout = async () => {  //
   }
 
   render() {
-    
+
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
         <Hoshi

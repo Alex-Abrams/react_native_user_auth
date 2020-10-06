@@ -53,16 +53,18 @@ export const requestEmail = email => ({
 //// in use $explain$
 export function getUserInfo(email, auth_token) {
   return function action(dispatch) {
-    dispatch(loadSplashScreen(true));
+    // dispatch(loadSplashScreen(true));
     const request = fetch(`http://10.0.2.2:3000/users/${email}`, {
       method: 'GET',
         headers: {
           "Authorization": auth_token
         }
     });
+    console.log("ASSFART");
 
     return request.then(
-      response => { response.status == 200 ? dispatch(isLoggedIn(true)) : dispatch(isLoggedIn(false))},
+      // response => { response.status == 200 ? dispatch(isLoggedIn(true)) : dispatch(isLoggedIn(false))},
+      response => console.log("STATUS???: ", response.status),
       // response => console.log("response STATUS: ", response.status), // response.status == 200 is what we want
       err => console.log('get userinfo error ', err)
     )
@@ -70,7 +72,7 @@ export function getUserInfo(email, auth_token) {
       json => console.log("userrequester: ", json),
       err => console.log("userrequester error", err) // review this nonsenjsew!!!!~!
     );
-    dispatch(loadSplashScreen(false));
+    // dispatch(loadSplashScreen(false));
   }
 }
 
@@ -79,7 +81,7 @@ export function getUserInfo(email, auth_token) {
 //// in use $explain$
 export function getThatToken(email, password) {
   return function action(dispatch) {
-    dispatch(loadSplashScreen(true));
+    // dispatch(loadSplashScreen(true));
     const request = fetch('http://10.0.2.2:3000/authenticate', {
       method: 'POST',
       headers: {
@@ -92,7 +94,7 @@ export function getThatToken(email, password) {
       })
     });
 
-    dispatch(loadSplashScreen(false));
+    // dispatch(loadSplashScreen(false));
      return request.then(
       // response => console.log("REQUQEST!: ", response.json().auth_token),
       response => response.json(),
@@ -114,7 +116,7 @@ export function getThatToken(email, password) {
 /// sign UP function
 export function signupUser(email, password, password_confirmation) {
   return function action(dispatch) {
-    dispatch(loadSplashScreen(true));
+    // dispatch(loadSplashScreen(true));
     const request = fetch('http://10.0.2.2:3000/users', {
       method: 'POST',
       headers: {
@@ -128,10 +130,11 @@ export function signupUser(email, password, password_confirmation) {
       })
     });
 
-    return request.then(
-      response => console.log("singupUser action test", response.json()),
-      err => console.log("singupUser test failed")
-    );
-    dispatch(loadSplashScreen(false));
+    // dispatch(loadSplashScreen(false));
+    return request;
+    // return request.then(
+    //   response => dispatch(loadSplashScreen(false)),
+    //   err => console.log("singupUser test failed")
+    // );
   }
 }

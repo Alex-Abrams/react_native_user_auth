@@ -7,6 +7,7 @@ import { AsyncStorage, Navigator } from 'react-native';
 import LoginContainer from './login_screen_container';
 import HomeContainer from '../containers/home_container';
 import SignupContainer from './signup_container';
+import SplashScreen from '../screens/splash_screen';
 
 
 import { receiveAuthToken, getThoseItems } from '../actions/auth_actions';
@@ -55,31 +56,37 @@ class FarStack extends React.Component {
     this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
   }
 
-  // componentDidUpdate(prevProps) {  // come back to this it might not work out, but things seem
-                                      // ok with out it, have to test full async rejoin later
-  //   if (this.props.auth_token !== prevProps.auth_token) {
-  //     this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
-  //   }
-  //   console.log("componentDidUpdate");
-  // }
+  // {(loggedIn == true) ? (
+  //   <>
+  //   <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
+  //   </>
+  // ) : (
+  //   <>
+  //   <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
+  //   <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
+  //   </>
+  // )}
+
+// above is for the stuff between the stack navigators....
 
   render() {
     const Stack = createStackNavigator();
-    const { loggedIn } = this.props;
+    const { loggedIn, splash_screen } = this.props;
 
     return (
       <Stack.Navigator initialRouteName="login">
-      {(loggedIn == true) ? (
-        <>
-        <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
-        </>
-      ) : (
-        <>
-        <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-        <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
-        </>
-      )}
-
+        {
+          splash_screen == true ?
+          (<Stack.Screen name="splash" component={SplashScreen} />)
+          : loggedIn == true ?
+          (<Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />)
+          :
+          (<>
+            <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
+            <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
+            </>
+          )
+        }
 
       </Stack.Navigator>
     );

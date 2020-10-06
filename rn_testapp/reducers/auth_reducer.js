@@ -33,7 +33,7 @@ const authReducer = (state = { loggedIn: false }, action) => {
     // case LOGGED_IN_USER:
     //   return merge({}, state, action.auth_token_two);
     case IS_LOGGED_IN:
-      return merge({}, state, { loggedIn: action.loggedIn });
+      return merge({}, state, { loggedIn: action.loggedIn }, { splash_screen: false });
     case LOGOUT_USER:
       // basically want to remove any auth_tokens from the state, doesnt matter if still in datbase
       return _nullUser;
