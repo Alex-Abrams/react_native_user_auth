@@ -18,7 +18,6 @@ class Signup extends React.Component {
   }
 
   _storeData = async (auth_token) => {
-    console.log("toooooooooooooooooooooooooooooooooooooooooken");
   try {
     await AsyncStorage.setItem(
       'token',
@@ -34,7 +33,6 @@ class Signup extends React.Component {
 };
 
 _storeEmail = async (email) => {
-  console.log("emaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaail");
   try {
     await AsyncStorage.setItem(
       'email',
@@ -65,8 +63,8 @@ renderSpinner() {
     .then(() => this.props.authActions.getThatToken(this.state.email, this.state.password))
     // .then(auth_token => this._storeData(auth_token.auth_token.auth_token)) // original
     .then((auth_token) => {
-      this._storeData(auth_token.auth_token.auth_token);
-      this.setState({ token: auth_token.auth_token.auth_token });
+        this._storeData(auth_token.auth_token.auth_token);
+        this.setState({ token: auth_token.auth_token.auth_token });
     })
     .then(() => this._storeEmail(this.state.email))
     .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token));
@@ -108,9 +106,24 @@ renderSpinner() {
     );
   }
 
+  renderError() {
+    return (
+      ( this.props.error ) ? (
+        <View>
+          <Text style={{ color: "red" }}>
+            {this.props.error.user_authentication}
+          </Text>
+        </View>
+      ) : (
+        null
+      )
+    );
+  }
+
   render() {
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+        {this.renderError()}
         {this.renderSpinner()}
       <Text>SIGNUP SCREEN</Text>
         <Hoshi

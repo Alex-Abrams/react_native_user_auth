@@ -5,8 +5,9 @@ import * as authActions from '../actions/auth_actions';
 
 const mapStateToProps = state => ({
   auth_token: state.auth_token,
-  // user: state.user,
-})
+  splash_screen: state.splash_screen,
+  error: state.error,
+});
 
 const mapDispatchToProps = dispatch => ({
   authActions: bindActionCreators(authActions, dispatch),

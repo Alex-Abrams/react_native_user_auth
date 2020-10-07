@@ -5,6 +5,8 @@ import * as authActions from '../actions/auth_actions';
 
 const mapStateToProps = state => ({
   auth_token: state.auth_token,
+  splash_screen: state.splash_screen,
+  error: state.error,
 })
 
 const mapDispatchToProps = dispatch => ({

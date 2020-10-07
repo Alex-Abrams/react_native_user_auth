@@ -6,6 +6,7 @@ export const REQEUST_USER_INFO = "REQEUST_USER_INFO";
 export const REQUEST_EMAIL = "REQUEST_EMAIL";
 export const LOAD_SPLASH_SCREEN = "LOAD_SPLASH_SCREEN";
 export const RECEIVE_AUTH_TOKEN_SPINNER = "RECEIVE_AUTH_TOKEN_SPINNER";
+export const RECEIVE_ERROR = "RECEIVE_ERROR";
 import fetch from 'cross-fetch';
 import { AsyncStorage } from 'react-native';
 
@@ -48,6 +49,11 @@ export const requestUserInfo = currentUser => ({
 export const requestEmail = email => ({
   type: REQUEST_EMAIL,
   email,
+});
+
+export const receiveError = error => ({
+  type: RECEIVE_ERROR,
+  error
 });
 
 //// in use $explain$
@@ -93,15 +99,25 @@ export function getThatToken(email, password) {
         email: `${email}`,
         password: `${password}`
       })
-    });
+    }); //original, and ends here
+  // }).then(() => console.log("hell from get that token"));
+
+  // console.log("request...........", request);
+
+    // request.then(() => console.log(".then success!"));
+
+    // request.then(
+    //   // response => console.log("response.status....", response.status),
+    //   response => { response.status == 200 ? dispatch(receiveError(null)) : dispatch(receiveError("chicken speers"))},
+    // );
 
     // dispatch(loadSplashScreen(false));
      return request.then(
       // response => console.log("REQUQEST!: ", response),
-      // response => response.json(), /// orginall
-      response => { response.status == 200 ? response.json() : console.log("dispatch error!")},
+      response => response.json(), // oringal
+      // response => { response.status == 200 ? response.json() : dispatch(receiveError("Invalid Credentials"))}, //finish this p wednesday
       // response => console.log("praying for an id", response.json()),
-      err => console.log("error!!: ", err)
+      // err => console.log("error!!: ", err)
     ) //;
     .then(
       // json => console.log(json),
@@ -109,7 +125,6 @@ export function getThatToken(email, password) {
       json => dispatch(receiveAuthToken(json)),
       err => console.log("jsonerror ", json)
     );
-
   }
 }
 
@@ -135,7 +150,8 @@ export function signupUser(email, password, password_confirmation) {
     // dispatch(loadSplashScreen(false));
     // return request;
     return request.then(
-      response => { response.status !== 200 ? console.log('clear errors') : console.log("dispatch error") },
+      // response => { response.status !== 200 ? console.log('clear errors') : console.log("dispatch error") },
+      response => {if (response.status !== 200) { dispatch(receiveError("An error occured"))}},
       err => console.log("singupUser test failed")
     );
   }
