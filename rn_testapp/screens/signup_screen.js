@@ -61,7 +61,6 @@ renderSpinner() {
 
     this.props.authActions.signupUser(this.state.email, this.state.password, this.state.password_confirmation)
     .then(() => this.props.authActions.getThatToken(this.state.email, this.state.password))
-    // .then(auth_token => this._storeData(auth_token.auth_token.auth_token)) // original
     .then((auth_token) => {
         this._storeData(auth_token.auth_token.auth_token);
         this.setState({ token: auth_token.auth_token.auth_token });
@@ -69,42 +68,9 @@ renderSpinner() {
     .then(() => this._storeEmail(this.state.email))
     .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token));
 
-    // .then(() => this.props.authActions.isLoggedIn(true));
-
-    // this.props.authActions.loadSplashScreen(false);
   }
 
 
-  _testFindEmail = async () => {
-    try {
-      const value = await AsyncStorage.getItem('email');
-      if (value !== null) {
-        // We have data!!
-        console.log("_testFindEmail ", value);
-        // this.props.authActions.requestEmail(value);
-        // return value;
-      } else {
-        console.log("no email sick"); //dispatch null
-        // this.props.authActions.requestEmail(null);  // might actually need to be an error action instead
-      }
-    } catch (error) {
-      // Error retrieving data
-    }
-  };
-
-  emailGetter() {
-    return(
-      <View>
-        <Button
-          title="email get"
-          color="purple"
-          onPress={() => {
-            this._testFindEmail();
-          }}>
-        </Button>
-      </View>
-    );
-  }
 
   renderError() {
     return (
@@ -161,8 +127,6 @@ renderSpinner() {
           styleDisabled={{ color: 'red' }}
           onPress={() => this._signUpHandler()}
         />
-
-      {this.emailGetter()}
         </View>
     );
   }

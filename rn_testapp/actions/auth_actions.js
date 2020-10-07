@@ -59,7 +59,6 @@ export const receiveError = error => ({
 //// in use $explain$
 export function getUserInfo(email, auth_token) {
   return function action(dispatch) {
-    // dispatch(loadSplashScreen(true));
     const request = fetch(`http://10.0.2.2:3000/users/${email}`, {
       method: 'GET',
         headers: {
@@ -70,15 +69,8 @@ export function getUserInfo(email, auth_token) {
 
     return request.then(
       response => { response.status == 200 ? dispatch(isLoggedIn(true)) : dispatch(isLoggedIn(false))},
-      // response => console.log("STATUS???: ", response.status),
-      // response => console.log("response STATUS: ", response.status), // response.status == 200 is what we want
       err => console.log('get userinfo error ', err)
-    )
-    .then(
-      json => console.log("userrequester: ", json),
-      err => console.log("userrequester error", err) // review this nonsenjsew!!!!~!
     );
-    // dispatch(loadSplashScreen(false));
   }
 }
 
@@ -86,9 +78,9 @@ export function getUserInfo(email, auth_token) {
 ////
 //// in use $explain$
 export function getThatToken(email, password) {
-  // prolly should clear errors here
+
   return function action(dispatch) {
-    // dispatch(loadSplashScreen(true));
+
     const request = fetch('http://10.0.2.2:3000/authenticate', {
       method: 'POST',
       headers: {
@@ -99,28 +91,12 @@ export function getThatToken(email, password) {
         email: `${email}`,
         password: `${password}`
       })
-    }); //original, and ends here
-  // }).then(() => console.log("hell from get that token"));
+    });
 
-  // console.log("request...........", request);
-
-    // request.then(() => console.log(".then success!"));
-
-    // request.then(
-    //   // response => console.log("response.status....", response.status),
-    //   response => { response.status == 200 ? dispatch(receiveError(null)) : dispatch(receiveError("chicken speers"))},
-    // );
-
-    // dispatch(loadSplashScreen(false));
      return request.then(
-      // response => console.log("REQUQEST!: ", response),
-      response => response.json(), // oringal
-      // response => { response.status == 200 ? response.json() : dispatch(receiveError("Invalid Credentials"))}, //finish this p wednesday
-      // response => console.log("praying for an id", response.json()),
-      // err => console.log("error!!: ", err)
-    ) //;
+      response => response.json(),
+    )
     .then(
-      // json => console.log(json),
 
       json => dispatch(receiveAuthToken(json)),
       err => console.log("jsonerror ", json)
@@ -133,7 +109,7 @@ export function getThatToken(email, password) {
 /// sign UP function
 export function signupUser(email, password, password_confirmation) {
   return function action(dispatch) {
-    // dispatch(loadSplashScreen(true));
+
     const request = fetch('http://10.0.2.2:3000/users', {
       method: 'POST',
       headers: {
@@ -147,10 +123,8 @@ export function signupUser(email, password, password_confirmation) {
       })
     });
 
-    // dispatch(loadSplashScreen(false));
-    // return request;
+
     return request.then(
-      // response => { response.status !== 200 ? console.log('clear errors') : console.log("dispatch error") },
       response => {if (response.status !== 200) { dispatch(receiveError("An error occured"))}},
       err => console.log("singupUser test failed")
     );

@@ -39,8 +39,6 @@ class Login extends React.Component {
       'token',
       `${auth_token}`
     );
-    // doesnt need dispatch to store here
-     // \
   } catch (error) {
     // Error saving data
   }

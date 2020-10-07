@@ -10,22 +10,7 @@ class Home extends React.Component {
     super(props);
   }
 
-  // componentDidMount() {
-  //   console.log("zoooooop", this.props.loggedIn);
-  //   if ( typeof this.props.loggedIn == 'undefined' || this.props.loggedIn == false) {
-  //
-  //     this.props.navigation.navigate('signup');
-  //   };
-  // }
-
-  sendOut({navigation}) {
-    if ( typeof this.props.loggedIn == 'undefined' || this.props.loggedIn == false) {
-
-      this.props.navigation.navigate('login');
-    };
-  }
-
-  userLogout = async () => {  //logout button should be its own container so i dont have to do this every time
+  userLogout = async () => {
     try {
       let keys = ['token', 'email'];
       await AsyncStorage.multiRemove(keys);
@@ -50,8 +35,6 @@ class Home extends React.Component {
     );
   }
 
-
-  // {this.sendOut(this.props.navigation)}
   render() {
 
     return(
