@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, Button, Text } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
 import { AsyncStorage } from 'react-native';
+import SplashScreen from './splash_screen';
 
 class Signup extends React.Component {
   constructor(props) {
@@ -45,8 +46,20 @@ _storeEmail = async (email) => {
   }
 };
 
+
+renderSpinner() {
+  return(
+    ( this.props.splash_screen == true ) ? (
+      <View>
+        <SplashScreen />
+      </View>
+    ) : (
+      null
+    )
+  );
+}
+
   _signUpHandler() {
-    this.props.authActions.loadSplashScreen(true);
 
     this.props.authActions.signupUser(this.state.email, this.state.password, this.state.password_confirmation)
     .then(() => this.props.authActions.getThatToken(this.state.email, this.state.password))
@@ -56,8 +69,7 @@ _storeEmail = async (email) => {
       this.setState({ token: auth_token.auth_token.auth_token });
     })
     .then(() => this._storeEmail(this.state.email))
-    .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token))
-    .then(() => this.props.authActions.loadSplashScreen(false));
+    .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token));
 
     // .then(() => this.props.authActions.isLoggedIn(true));
 
@@ -99,6 +111,7 @@ _storeEmail = async (email) => {
   render() {
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+        {this.renderSpinner()}
       <Text>SIGNUP SCREEN</Text>
         <Hoshi
           label={'Email'}

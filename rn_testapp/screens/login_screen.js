@@ -4,6 +4,10 @@ import { View, Button, Text } from 'react-native';
 import { Hoshi } from 'react-native-textinput-effects';
 import { AsyncStorage } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import SplashScreen from './splash_screen';
+
+//
+
 
 class Login extends React.Component {
   constructor(props) {
@@ -56,8 +60,7 @@ userLogout = async () => {  //
 
 
 // ----------------------------------------------------------------------
-  //WORKS!!
-  // ALSO THIS WORKS SO HARD!!!!! ITS IN ASYNC STORAGE
+
   _signInHandler() {
     this.props.authActions.loadSplashScreen(true);
 
@@ -73,6 +76,18 @@ userLogout = async () => {  //
     .then(() => this.props.authActions.getUserInfo(this.state.email, this.state.token))
     .then(() => this.props.authActions.loadSplashScreen(false));
 
+  }
+
+  renderSpinner() {
+    return(
+      ( this.props.splash_screen == true ) ? (
+        <View>
+          <SplashScreen />
+        </View>
+      ) : (
+        null
+      )
+    );
   }
 
 
@@ -109,6 +124,7 @@ userLogout = async () => {  //
 
     return(
       <View style={{flex: 1, flexDirection: 'column', justifyContent: 'center'}}>
+        {this.renderSpinner()}
         <Hoshi
           label={'Email'}
           borderColor={'#b76c94'}
@@ -140,6 +156,7 @@ userLogout = async () => {  //
 
         {this.logoutButton()}
         {this.toSignup(this.props.navigation)}
+
       </View>
     );
   }

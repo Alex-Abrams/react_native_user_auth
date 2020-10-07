@@ -56,16 +56,6 @@ class FarStack extends React.Component {
     this.props.authActions.getUserInfo(this.props.email, this.props.auth_token);
   }
 
-  // {(loggedIn == true) ? (
-  //   <>
-  //   <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
-  //   </>
-  // ) : (
-  //   <>
-  //   <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-  //   <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
-  //   </>
-  // )}
 
 // above is for the stuff between the stack navigators....
 
@@ -75,18 +65,17 @@ class FarStack extends React.Component {
 
     return (
       <Stack.Navigator initialRouteName="login">
-        {
-          splash_screen == true ?
-          (<Stack.Screen name="splash" component={SplashScreen} />)
-          : loggedIn == true ?
-          (<Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />)
-          :
-          (<>
-            <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
-            <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
-            </>
-          )
-        }
+
+        {(loggedIn == true) ? (
+          <>
+          <Stack.Screen name="Home" component={HomeContainer} navigation={this.props.navigation} />
+          </>
+        ) : (
+          <>
+          <Stack.Screen name="login" component={LoginContainer} navigation={this.props.navigation} />
+          <Stack.Screen name="signup" component={SignupContainer} navigation={this.props.navigation} />
+          </>
+          )}
 
       </Stack.Navigator>
     );
